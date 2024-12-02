@@ -36,3 +36,11 @@ services:
     Sonata\MediaBundle\Admin\GalleryAdmin:
         alias: sonata.media.admin.gallery
 
+    App\Admin\CategoryAdmin:
+        arguments:
+            - ~
+            - App\Entity\Category
+            - ~
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Content", label: "Category" }
+
