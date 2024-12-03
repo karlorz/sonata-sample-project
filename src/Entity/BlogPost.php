@@ -8,11 +8,8 @@ namespace App\Entity;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Category;
+use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity
- * @ORM\Table(name="blog_post")
- */
 #[ORM\Entity]
 #[ORM\Table(name: 'blog_post')]
 class BlogPost
@@ -23,9 +20,19 @@ class BlogPost
     private ?int $id = null;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
+    #[Assert\NotBlank(message: "The title should not be blank.")]
+    #[Assert\Length(
+        max: 255,
+        maxMessage: "The title cannot exceed {{ limit }} characters."
+    )]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Assert\NotBlank(message: "The content should not be blank.")]
+    #[Assert\Length(
+        min: 10,
+        minMessage: "The content must be at least {{ limit }} characters long."
+    )]
     private ?string $body = null;
 
     #[ORM\Column(type: Types::BOOLEAN)]
@@ -33,27 +40,26 @@ class BlogPost
 
     #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'blogPosts')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotNull(message: "The category must be selected.")]
     private ?Category $category = null;
 
-    /**
-     * Get the ID of the blog post.
-     */
+    // ... (Constructor, Getters, Setters, __toString)
+    
+    public function __construct()
+    {
+        // Initialize collections if any
+    }
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * Get the title of the blog post.
-     */
     public function getTitle(): ?string
     {
         return $this->title;
     }
 
-    /**
-     * Set the title of the blog post.
-     */
     public function setTitle(string $title): self
     {
         $this->title = $title;
@@ -61,17 +67,11 @@ class BlogPost
         return $this;
     }
 
-    /**
-     * Get the body/content of the blog post.
-     */
     public function getBody(): ?string
     {
         return $this->body;
     }
 
-    /**
-     * Set the body/content of the blog post.
-     */
     public function setBody(string $body): self
     {
         $this->body = $body;
@@ -79,17 +79,11 @@ class BlogPost
         return $this;
     }
 
-    /**
-     * Check if the blog post is a draft.
-     */
     public function isDraft(): bool
     {
         return $this->draft;
     }
 
-    /**
-     * Set the draft status of the blog post.
-     */
     public function setDraft(bool $draft): self
     {
         $this->draft = $draft;
@@ -97,17 +91,11 @@ class BlogPost
         return $this;
     }
 
-    /**
-     * Get the category of the blog post.
-     */
     public function getCategory(): ?Category
     {
         return $this->category;
     }
 
-    /**
-     * Set the category of the blog post.
-     */
     public function setCategory(?Category $category): self
     {
         $this->category = $category;
@@ -115,9 +103,6 @@ class BlogPost
         return $this;
     }
 
-    /**
-     * String representation of the blog post.
-     */
     public function __toString(): string
     {
         return $this->title ?? 'Untitled Blog Post';
