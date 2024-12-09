@@ -15,4 +15,5 @@ return [
     Sonata\AdminBundle\SonataAdminBundle::class => ['all' => true],
     Sonata\MediaBundle\SonataMediaBundle::class => ['all' => true],
     SilasJoisten\Sonata\MultiUploadBundle\SonataMultiUploadBundle::class => ['all' => true],
+    Symfony\Bundle\WebProfilerBundle\WebProfilerBundle::class => ['all' => true],
 ];

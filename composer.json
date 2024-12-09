@@ -17,6 +17,7 @@
         "symfony/framework-bundle": "^5.3",
         "symfony/runtime": "^5.3",
         "symfony/uid": "5.3.*",
+        "symfony/web-profiler-bundle": "5.3.*",
         "symfony/yaml": "^5.3",
         "thecodingmachine/safe": "^2.1"
     },
