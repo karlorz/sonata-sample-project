@@ -38,7 +38,7 @@ services:
 
     App\Admin\CategoryAdmin:
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Content", label: "Category" }
+            - { name: sonata.admin, manager_type: orm, group: "Content", label: "Category", admin_code: app.admin.category }
         arguments:
             - ~
             - App\Entity\Category
@@ -46,8 +46,17 @@ services:
 
     App\Admin\BlogPostAdmin:
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Content", label: "Blog Post" }
+            - { name: sonata.admin, manager_type: orm, group: "Content", label: "Blog Post", admin_code: app.admin.blog_post }
         arguments:
             - ~
             - App\Entity\BlogPost
+            - ~
+
+    app.admin.attachment:
+        class: App\Admin\AttachmentAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Content", label: "Attachment" }
+        arguments:
+            - ~
+            - App\Entity\Attachment
             - ~

@@ -7,6 +7,8 @@ namespace App\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use App\Entity\Category;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -43,11 +45,20 @@ class BlogPost
     #[Assert\NotNull(message: "The category must be selected.")]
     private ?Category $category = null;
 
+    #[ORM\OneToMany(mappedBy: 'blogPost', targetEntity: Attachment::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    private Collection $attachments;
+
     // ... (Constructor, Getters, Setters, __toString)
     
     public function __construct()
     {
         // Initialize collections if any
+        $this->attachments = new ArrayCollection();
+    }
+
+    public function __toString(): string
+    {
+        return $this->title ?? 'Untitled Blog Post';
     }
 
     public function getId(): ?int
@@ -103,8 +114,33 @@ class BlogPost
         return $this;
     }
 
-    public function __toString(): string
+    /**
+     * @return Collection<int, Attachment>
+     */
+    public function getAttachments(): Collection
     {
-        return $this->title ?? 'Untitled Blog Post';
+        return $this->attachments;
+    }
+
+    public function addAttachment(Attachment $attachment): self
+    {
+        if (!$this->attachments->contains($attachment)) {
+            $this->attachments[] = $attachment;
+            $attachment->setBlogPost($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAttachment(Attachment $attachment): self
+    {
+        if ($this->attachments->removeElement($attachment)) {
+            // set the owning side to null (unless already changed)
+            if ($attachment->getBlogPost() === $this) {
+                $attachment->setBlogPost(null);
+            }
+        }
+
+        return $this;
     }
 }
